@@ -19,4 +19,11 @@ def get_counts(results, names):
         clss = result.boxes.cls.cpu().numpy().astype(int)
         for cls in clss:
             counts[names[cls]] += 1
-    return counts
+    # Filter to only return classes with > 0 occurrences
+    return {k: v for k, v in counts.items() if v > 0}
+
+import streamlit as st
+
+def inject_custom_css():
+    with open('style.css') as f:
+        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)

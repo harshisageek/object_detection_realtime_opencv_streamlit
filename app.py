@@ -1,33 +1,53 @@
 import streamlit as st
+from utils import inject_custom_css
 
 st.set_page_config(
     page_title="YOLO Object Detection",
     page_icon="🤖",
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="expanded"
 )
 
-st.title("YOLO Object Detection")
+inject_custom_css()
 
-# --- Page Layout ---
-col1, col2 = st.columns(2)
+# --- Hero Section ---
+st.markdown('<div class="hero-title">Real-Time Object Detection</div>', unsafe_allow_html=True)
+st.markdown('<div class="hero-subtitle">Powered by YOLOv8 and Streamlit</div>', unsafe_allow_html=True)
+
+st.write("")
+st.write("")
+
+# --- Feature Cards ---
+col1, col2, col3 = st.columns(3)
 
 with col1:
-    st.image("https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExb212NTd6cDU2bXV5NWhjenk2Z3VjN2o1Z3Z3bWQxbmN2b3hzaXFmMyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3oKIPnAiaMCws8nOsE/giphy.gif")
+    st.markdown("""
+        <div class="feature-card">
+            <div class="feature-icon">🖼️</div>
+            <div class="feature-title">Image Analysis</div>
+            <div class="feature-desc">Upload high-resolution images and instantly detect objects with bounding boxes and analytics.</div>
+        </div>
+    """, unsafe_allow_html=True)
 
 with col2:
     st.markdown("""
-    ### This app showcases the use of YOLOv8 for object detection.
+        <div class="feature-card">
+            <div class="feature-icon">🎬</div>
+            <div class="feature-title">Video Tracking</div>
+            <div class="feature-desc">Process video files frame-by-frame to track objects over time with adjustable confidence.</div>
+        </div>
+    """, unsafe_allow_html=True)
 
-    You can analyze images, videos, or a live webcam feed.
+with col3:
+    st.markdown("""
+        <div class="feature-card">
+            <div class="feature-icon">📸</div>
+            <div class="feature-title">Live Webcam</div>
+            <div class="feature-desc">Connect your camera for lightning-fast, real-time object detection directly in your browser.</div>
+        </div>
+    """, unsafe_allow_html=True)
 
-    ---
-
-    #### **How to Use:**
-    1.  **Select a mode** from the sidebar.
-    2.  **Choose a YOLOv8 model** (from the speedy 'n' to the powerful 'x').
-    3.  **Adjust the confidence threshold** to filter out uncertain detections.
-    4.  **Pick specific object classes** to focus your analysis.
-
-    ---
-    Have fun
-    """)
+st.write("")
+st.write("")
+st.markdown("<hr style='border: 1px solid #e9ecef;'>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: #6c757d; font-size: 0.9rem;'>👈 Use the sidebar to select a detection mode and get started.</p>", unsafe_allow_html=True)

@@ -1,0 +1,77 @@
+/* Custom CSS for Premium Light Mode */
+
+/* Hide default Streamlit header and footer for a cleaner look */
+header {visibility: hidden;}
+footer {visibility: hidden;}
+
+/* Custom Hero Section */
+.hero-title {
+    font-size: 3.5rem !important;
+    font-weight: 800 !important;
+    background: linear-gradient(90deg, #0066ff, #00c3ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-align: center;
+    margin-bottom: 0.5rem;
+    padding-top: 2rem;
+}
+.hero-subtitle {
+    font-size: 1.2rem !important;
+    font-weight: 400 !important;
+    color: #6c757d;
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+/* Feature Cards */
+.feature-card {
+    background: #ffffff;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    padding: 2rem 1.5rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    text-align: center;
+    height: 100%;
+}
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,102,255,0.1);
+    border-color: #0066ff;
+}
+.feature-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+.feature-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #212529;
+    margin-bottom: 0.5rem;
+}
+.feature-desc {
+    font-size: 0.95rem;
+    color: #6c757d;
+}
+
+/* Make metrics look premium */
+div[data-testid="stMetricValue"] {
+    font-size: 2rem !important;
+    font-weight: 700 !important;
+    color: #0066ff !important;
+}
+div[data-testid="stMetricLabel"] {
+    font-size: 1rem !important;
+    font-weight: 500 !important;
+    color: #495057 !important;
+}
+
+/* Styled containers */
+.styled-container {
+    background: #ffffff;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    margin-top: 1rem;
+}

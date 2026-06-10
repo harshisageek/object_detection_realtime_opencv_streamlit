@@ -23,7 +23,13 @@ def get_counts(results, names):
     return {k: v for k, v in counts.items() if v > 0}
 
 import streamlit as st
+import os
 
 def inject_custom_css():
-    with open('style.css') as f:
-        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+    # Use absolute path to ensure Streamlit Cloud finds the file
+    css_path = os.path.join(os.path.dirname(__file__), 'style.css')
+    try:
+        with open(css_path) as f:
+            st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+    except Exception as e:
+        st.error(f"Failed to load CSS: {e}")

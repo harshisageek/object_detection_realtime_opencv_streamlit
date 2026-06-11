@@ -3,7 +3,7 @@ import torch
 from detector import ObjectDetector
 from utils import draw_boxes
 import av
-from streamlit_webrtc import webrtc_streamer, VideoTransformerBase
+from streamlit_webrtc import webrtc_streamer, VideoProcessorBase
 
 st.set_page_config(page_title="Webcam Detection", page_icon="📸", layout="wide")
 st.title("Webcam Live Detection")
@@ -47,7 +47,7 @@ if "All classes" not in st.session_state.selections_cam:
     selected_class_ids = [k for k, v in detector.names.items() if v in st.session_state.selections_cam]
 
 # This class processes the video frames
-class VideoTransformer(VideoTransformerBase):
+class VideoTransformer(VideoProcessorBase):
     def __init__(self):
         self.detector = detector
         self.confidence_threshold = confidence_threshold
@@ -69,8 +69,11 @@ st.info(f"Model: **{selected_model}** | Device: **{next(detector.model.model.par
 
 webrtc_streamer(
     key="webcam",
-    video_transformer_factory=VideoTransformer,
+    video_processor_factory=VideoTransformer,
     media_stream_constraints={"video": True, "audio": False},
+    rtc_configuration={
+        "iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]
+    }
 )
 
 st.info("Click the 'START' button above to begin detection. You may need to grant camera permissions in your browser.")

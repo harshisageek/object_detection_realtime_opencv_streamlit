@@ -29,6 +29,25 @@ try:
 except ImportError:
     pass
 
+# Apply monkeypatch to aioice to prevent NoneType AttributeError on closed UDP transports in python 3.13
+try:
+    import aioice.ice
+    _orig_send_stun = aioice.ice.StunProtocol.send_stun
+
+    def _patched_send_stun(self, message, addr) -> None:
+        if self.transport:
+            try:
+                # Check if internal socket has been closed/cleared
+                if getattr(self.transport, "_sock", None) is None:
+                    return
+                _orig_send_stun(self, message, addr)
+            except (AttributeError, OSError):
+                pass
+
+    aioice.ice.StunProtocol.send_stun = _patched_send_stun
+except ImportError:
+    pass
+
 def draw_boxes(frame, results, names):
     for result in results:
         boxes = result.boxes.xyxy.cpu().numpy().astype(int)

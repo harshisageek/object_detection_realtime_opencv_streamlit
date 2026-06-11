@@ -67,24 +67,37 @@ class VideoTransformer(VideoProcessorBase):
 # --- Main Page ---
 st.info(f"Model: **{selected_model}** | Device: **{next(detector.model.model.parameters()).device}**")
 
+# Default free TURN server (often overloaded)
+rtc_configuration = {
+    "iceServers": [
+        {"urls": ["stun:stun.l.google.com:19302"]},
+        {
+            "urls": [
+                "turn:openrelay.metered.ca:80",
+                "turn:openrelay.metered.ca:443",
+                "turn:openrelay.metered.ca:443?transport=tcp"
+            ],
+            "username": "openrelayproject",
+            "credential": "openrelayproject"
+        }
+    ]
+}
+
+# If Twilio credentials are provided in secrets, use them for a reliable TURN server
+if "TWILIO_ACCOUNT_SID" in st.secrets and "TWILIO_AUTH_TOKEN" in st.secrets:
+    try:
+        from twilio.rest import Client
+        client = Client(st.secrets["TWILIO_ACCOUNT_SID"], st.secrets["TWILIO_AUTH_TOKEN"])
+        token = client.tokens.create()
+        rtc_configuration = {"iceServers": token.ice_servers}
+    except Exception as e:
+        st.warning(f"Failed to get Twilio TURN servers: {e}")
+
 webrtc_streamer(
     key="webcam",
     video_processor_factory=VideoTransformer,
     media_stream_constraints={"video": True, "audio": False},
-    rtc_configuration={
-        "iceServers": [
-            {"urls": ["stun:stun.l.google.com:19302"]},
-            {
-                "urls": [
-                    "turn:openrelay.metered.ca:80",
-                    "turn:openrelay.metered.ca:443",
-                    "turn:openrelay.metered.ca:443?transport=tcp"
-                ],
-                "username": "openrelayproject",
-                "credential": "openrelayproject"
-            }
-        ]
-    }
+    rtc_configuration=rtc_configuration
 )
 
 st.info("Click the 'START' button above to begin detection. You may need to grant camera permissions in your browser.")

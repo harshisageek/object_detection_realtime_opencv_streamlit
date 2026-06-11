@@ -72,7 +72,18 @@ webrtc_streamer(
     video_processor_factory=VideoTransformer,
     media_stream_constraints={"video": True, "audio": False},
     rtc_configuration={
-        "iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]
+        "iceServers": [
+            {"urls": ["stun:stun.l.google.com:19302"]},
+            {
+                "urls": [
+                    "turn:openrelay.metered.ca:80",
+                    "turn:openrelay.metered.ca:443",
+                    "turn:openrelay.metered.ca:443?transport=tcp"
+                ],
+                "username": "openrelayproject",
+                "credential": "openrelayproject"
+            }
+        ]
     }
 )
 

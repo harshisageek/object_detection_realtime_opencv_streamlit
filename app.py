@@ -1,4 +1,5 @@
 import streamlit as st
+import utils
 
 st.set_page_config(
     page_title="YOLO Object Detection",

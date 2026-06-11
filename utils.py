@@ -1,6 +1,34 @@
 import cv2
 import numpy as np
 
+# Apply monkeypatch to streamlit-webrtc to fix a thread-safety/NoneType issue in python 3.13 or concurrent stop calls
+try:
+    import streamlit_webrtc.shutdown
+    import threading
+    import logging
+
+    def _patched_stop(self, timeout: float = 1.0) -> None:
+        polling_thread = self._polling_thread
+        if polling_thread is not None:
+            self._polling_thread_stop_event.set()
+
+            # do not join current thread
+            if threading.current_thread() is not polling_thread:
+                polling_thread.join(timeout=timeout)
+                logger = logging.getLogger("streamlit_webrtc.shutdown")
+                if polling_thread.is_alive():
+                    logger.warning("ShutdownPolling thread did not exit cleanly")
+                else:
+                    logger.debug("ShutdownPolling thread stopped cleanly")
+            else:
+                logging.getLogger("streamlit_webrtc.shutdown").debug("Stop called from polling thread itself, skipping join.")
+
+            self._polling_thread = None
+
+    streamlit_webrtc.shutdown.SessionShutdownObserver.stop = _patched_stop
+except ImportError:
+    pass
+
 def draw_boxes(frame, results, names):
     for result in results:
         boxes = result.boxes.xyxy.cpu().numpy().astype(int)
